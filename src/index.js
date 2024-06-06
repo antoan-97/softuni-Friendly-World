@@ -14,7 +14,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/friendly-world')
 .catch(err => console.log('DB Error,', err.message));
 
 app.engine('hbs', handlebars.engine({
-    extname: 'hbs'
+    extname: 'hbs',
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
 }));
 app.set('view engine', 'hbs')
 app.set('views', 'src/views');
