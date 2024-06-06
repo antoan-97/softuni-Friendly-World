@@ -96,4 +96,21 @@ router.get('/:animalId/delete', async (req, res) => {
 });
 
 
+router.get('/search', async (req, res) => {
+    const { name } = req.query;
+
+    let query = {};
+    if (name) {
+        query.name = new RegExp(`^${name}$`, 'i'); // Case-insensitive full match
+    }
+
+    try {
+        const results = await animalManager.search(query);
+        res.render('partials/search', { results }); // Render the 'search.hbs' template
+    } catch (err) {
+        res.render('404', { error: getErrorMessage(err) });
+    }
+});
+
+
 module.exports = router;
