@@ -61,4 +61,16 @@ router.get('/:animalId/donate', async (req, res) => {
 });
 
 
+router.get('/:animalId/edit', async (req,res)=>{
+  const animalId = req.params.animalId;
+
+  try {
+    const animal = await animalManager.getOne(animalId).lean();
+    res.render('animals/edit', { animal })
+  } catch (err) {
+    res.render('404', { error: getErrorMessage(err) })
+  }
+});
+
+
 module.exports = router;
