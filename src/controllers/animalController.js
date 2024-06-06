@@ -82,7 +82,7 @@ router.post('/:animalId/edit', isAuth, async (req, res) => {
         await animalManager.edit(animalId, animalData);
         res.redirect(`/animals/${animalId}/details`);
     } catch (err) {
-        res.render('404', { animal: { ...animalData, _id: animalId }, error: getErrorMessage(err) });
+        res.render('animals/edit', { animal: { ...animalData, _id: animalId }, error: getErrorMessage(err) });
     }
 });
 
