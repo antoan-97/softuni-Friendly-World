@@ -72,5 +72,17 @@ router.get('/:animalId/edit', async (req,res)=>{
   }
 });
 
+router.post('/:animalId/edit', async (req,res) =>{
+    const animalId = req.params.animalId;
+    const animalData = req.body;
+
+    try {
+        await animalManager.edit(animalId,animalData);
+        res.redirect(`/animals/${animalId}/details`);
+    } catch (err) {
+        res.render('404', { animal: { ...animalData, _id: animalId },  error: getErrorMessage(err) });
+    }
+});
+
 
 module.exports = router;
