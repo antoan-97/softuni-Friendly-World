@@ -8,6 +8,9 @@ exports.getOne = (animalId) => Animal.findById(animalId).populate('owner');
 
 exports.edit = (animalId,animalData) => Animal.findByIdAndUpdate(animalId,animalData,  { runValidators: true, new: true });
 
+exports.delete = (animalId) => Animal.findByIdAndDelete(animalId);
+
+
 exports.donate = async (animalId, userId) => {
     const animal = await Animal.findById(animalId);
 

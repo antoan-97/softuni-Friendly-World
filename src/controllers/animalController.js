@@ -61,26 +61,37 @@ router.get('/:animalId/donate', async (req, res) => {
 });
 
 
-router.get('/:animalId/edit', async (req,res)=>{
-  const animalId = req.params.animalId;
+router.get('/:animalId/edit', async (req, res) => {
+    const animalId = req.params.animalId;
 
-  try {
-    const animal = await animalManager.getOne(animalId).lean();
-    res.render('animals/edit', { animal })
-  } catch (err) {
-    res.render('404', { error: getErrorMessage(err) })
-  }
+    try {
+        const animal = await animalManager.getOne(animalId).lean();
+        res.render('animals/edit', { animal })
+    } catch (err) {
+        res.render('404', { error: getErrorMessage(err) })
+    }
 });
 
-router.post('/:animalId/edit', async (req,res) =>{
+router.post('/:animalId/edit', async (req, res) => {
     const animalId = req.params.animalId;
     const animalData = req.body;
 
     try {
-        await animalManager.edit(animalId,animalData);
+        await animalManager.edit(animalId, animalData);
         res.redirect(`/animals/${animalId}/details`);
     } catch (err) {
-        res.render('404', { animal: { ...animalData, _id: animalId },  error: getErrorMessage(err) });
+        res.render('404', { animal: { ...animalData, _id: animalId }, error: getErrorMessage(err) });
+    }
+});
+
+router.get('/:animalId/delete', async (req, res) => {
+    const animalId = req.params.animalId;
+
+    try {
+        await animalManager.delete(animalId);
+        res.redirect('/animals')
+    } catch (err) {
+        res.render('404', { error: getErrorMessage(err) })
     }
 });
 
