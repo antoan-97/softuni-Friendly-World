@@ -3,9 +3,14 @@ const animalManager = require('../managers/animalManager');
 const { getErrorMessage } = require('../utils/errorHelper')
 
 
+router.get('/', async (req, res) => {
+    const animals = await animalManager.getAll().lean();
+    res.render('animals', { animals })
+});
+
 router.get('/create', async (req, res) => {
     try {
-        res.render('create');
+        res.render('animal/create');
     } catch (err) {
         res.render('404')
     }
