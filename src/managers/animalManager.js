@@ -10,6 +10,10 @@ exports.edit = (animalId,animalData) => Animal.findByIdAndUpdate(animalId,animal
 
 exports.delete = (animalId) => Animal.findByIdAndDelete(animalId);
 
+exports.search = (query) => {
+    return Animal.find(query).lean();
+};
+
 
 exports.donate = async (animalId, userId) => {
     const animal = await Animal.findById(animalId);
