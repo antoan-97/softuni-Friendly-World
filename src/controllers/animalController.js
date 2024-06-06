@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const animalManager = require('../managers/animalManager');
+
 const { getErrorMessage } = require('../utils/errorHelper')
+const { isAuth } = require('../middlewares/authMiddleware');
 
 
 router.get('/', async (req, res) => {
@@ -8,7 +10,7 @@ router.get('/', async (req, res) => {
     res.render('animals', { animals })
 });
 
-router.get('/create', async (req, res) => {
+router.get('/create', isAuth, async (req, res) => {
     try {
         res.render('animals/create');
     } catch (err) {
@@ -18,7 +20,7 @@ router.get('/create', async (req, res) => {
 });
 
 
-router.post('/create', async (req, res) => {
+router.post('/create', isAuth, async (req, res) => {
     const animalData = {
         ...req.body,
         owner: req.user._id,
@@ -48,7 +50,7 @@ router.get('/:animalId/details', async (req, res) => {
     }
 });
 
-router.get('/:animalId/donate', async (req, res) => {
+router.get('/:animalId/donate', isAuth, async (req, res) => {
     const animalId = req.params.animalId;
     const userId = req.user._id;
 
@@ -61,7 +63,7 @@ router.get('/:animalId/donate', async (req, res) => {
 });
 
 
-router.get('/:animalId/edit', async (req, res) => {
+router.get('/:animalId/edit', isAuth, async (req, res) => {
     const animalId = req.params.animalId;
 
     try {
@@ -72,7 +74,7 @@ router.get('/:animalId/edit', async (req, res) => {
     }
 });
 
-router.post('/:animalId/edit', async (req, res) => {
+router.post('/:animalId/edit', isAuth, async (req, res) => {
     const animalId = req.params.animalId;
     const animalData = req.body;
 
@@ -84,7 +86,7 @@ router.post('/:animalId/edit', async (req, res) => {
     }
 });
 
-router.get('/:animalId/delete', async (req, res) => {
+router.get('/:animalId/delete', isAuth, async (req, res) => {
     const animalId = req.params.animalId;
 
     try {
