@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
 router.get('/create', async (req, res) => {
     try {
-        res.render('animal/create');
+        res.render('animals/create');
     } catch (err) {
         res.render('404')
     }
@@ -27,6 +27,34 @@ router.post('/create', async (req, res) => {
     try {
         await animalManager.create(animalData);
         res.redirect('/')
+    } catch (err) {
+        res.render('404', { error: getErrorMessage(err) })
+    }
+});
+
+
+router.get('/:animalId/details', async (req, res) => {
+    const { user } = req;
+    const animalId = req.params.animalId;
+
+    const animal = await animalManager.getOne(animalId).lean();
+    const isOwner = req.user?._id == animal.owner?._id
+    const hasDonated = animal.donations?.some((v) => v?.toString() === user?._id);
+
+    try {
+        res.render('animals/details', { animal, user, isOwner, hasDonated, });
+    } catch (err) {
+        res.render('404', { error: getErrorMessage(err) })
+    }
+});
+
+router.get('/:animalId/donate', async (req, res) => {
+    const animalId = req.params.animalId;
+    const userId = req.user._id;
+
+    try {
+        await animalManager.donate(animalId, userId);
+        res.redirect(`/animals/${animalId}/details`)
     } catch (err) {
         res.render('404', { error: getErrorMessage(err) })
     }
