@@ -2,7 +2,7 @@ const router = require('express').Router();
 const animalManager = require('../managers/animalManager');
 
 const { getErrorMessage } = require('../utils/errorHelper')
-const { isAuth } = require('../middlewares/authMiddleware');
+const { isAuth, isOwner } = require('../middlewares/authMiddleware');
 
 
 router.get('/', async (req, res) => {
