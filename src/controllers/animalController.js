@@ -63,7 +63,7 @@ router.get('/:animalId/donate', isAuth, async (req, res) => {
 });
 
 
-router.get('/:animalId/edit', isAuth, async (req, res) => {
+router.get('/:animalId/edit', isAuth,isOwner, async (req, res) => {
     const animalId = req.params.animalId;
 
     try {
@@ -74,7 +74,7 @@ router.get('/:animalId/edit', isAuth, async (req, res) => {
     }
 });
 
-router.post('/:animalId/edit', isAuth, async (req, res) => {
+router.post('/:animalId/edit', isAuth, isOwner, async (req, res) => {
     const animalId = req.params.animalId;
     const animalData = req.body;
 
@@ -86,7 +86,7 @@ router.post('/:animalId/edit', isAuth, async (req, res) => {
     }
 });
 
-router.get('/:animalId/delete', isAuth, async (req, res) => {
+router.get('/:animalId/delete', isOwner, isAuth, async (req, res) => {
     const animalId = req.params.animalId;
 
     try {
