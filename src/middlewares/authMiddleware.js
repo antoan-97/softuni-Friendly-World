@@ -40,10 +40,32 @@ exports.isLoggedIn = (req, res, next) => {
 
 
 exports.isOwner = async (req, res, next) => {
-    const animalId = req.params.animalId;
-    const animal = await animalManager.getOne(animalId);
-    if (!animal || animal.owner.toString() !== req.user._id.toString()) {
-        return res.render('404');
+    try {
+        const animalId = req.params.animalId;
+        const animal = await animalManager.getOne(animalId);
+
+        if (!animal) {
+            console.log(`Animal with ID ${animalId} not found`);
+            return res.render('404');
+        }
+
+        if (!req.user) {
+            console.log('User is not authenticated');
+            return res.render('404');
+        }
+
+        console.log(`Animal owner: ${String(animal.owner._id)}`);
+        console.log(`Authenticated user: ${String(req.user._id)}`);
+
+        if (String(animal.owner._id) === String(req.user._id)) {
+            console.log(`User ${req.user._id} is the owner of animal ${animalId}`);
+            return next();
+        } else {
+            console.log(`User ${req.user._id} is not the owner of animal ${animalId}`);
+            return res.render('404');
+        }
+    } catch (error) {
+        console.error(`Error in isOwner middleware: ${error.message}`);
+        return res.render('404', { error: 'An error occurred while checking ownership' });
     }
-    next();
 };
